@@ -5,10 +5,16 @@
 // sounds like her voice (criterion 2), lands funny with no context
 // (criterion 3), is tied to robots/machines (criterion 4), and is fresh
 // — not the obvious "robot" (criterion 5).
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const WORD = "robit";
 const OUT_PATH = "/output/entry.txt";
 
 mkdirSync("/output", { recursive: true });
 writeFileSync(OUT_PATH, WORD);
+
+// Read back and verify the gate: UTF-8, 1–30 chars, not only whitespace.
+const written = readFileSync(OUT_PATH, "utf-8");
+if (written !== WORD || written.length < 1 || written.length > 30) {
+  throw new Error(`entry.txt failed verification: ${JSON.stringify(written)}`);
+}
