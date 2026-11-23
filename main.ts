@@ -13,8 +13,14 @@ const OUT_PATH = "/output/entry.txt";
 mkdirSync("/output", { recursive: true });
 writeFileSync(OUT_PATH, WORD);
 
-// Read back and verify the gate: UTF-8, 1–30 chars, not only whitespace.
+// Read back and verify the gate: UTF-8, 1–30 chars, not only whitespace,
+// and exactly one word (no spaces or punctuation tricks).
 const written = readFileSync(OUT_PATH, "utf-8");
-if (written !== WORD || written.length < 1 || written.length > 30) {
+if (
+  written !== WORD ||
+  written.length < 1 ||
+  written.length > 30 ||
+  /\s/.test(written)
+) {
   throw new Error(`entry.txt failed verification: ${JSON.stringify(written)}`);
 }
